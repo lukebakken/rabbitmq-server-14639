@@ -17,9 +17,6 @@ services:
   rmq:
     <<: *common-config
     hostname: rmq
-    volumes:
-      - ./data/rmq:/var/lib/rabbitmq/mnesia
-      - ./log/rmq:/var/log/rabbitmq
     ports:
       # HOST:CONTAINER
       - 15672:15672
@@ -28,7 +25,7 @@ services:
     networks:
       - rabbitnet
     command:
-      - --uri=amqp://rmq
+      - --uri=amqp://rmq-14639:guest@rmq/vhost0
       - --servers-startup-timeout=30
       - --producers=5
       - --consumers=0
