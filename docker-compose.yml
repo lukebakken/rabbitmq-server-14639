@@ -1,0 +1,42 @@
+networks:
+  rabbitnet:
+    name: rabbitnet
+    driver: bridge
+
+x-rmq-common: &common-config
+  networks:
+    - rabbitnet
+  build: rmq
+  mem_limit: 8gb
+  ulimits:
+    nofile:
+      soft: 65536
+      hard: 131072
+
+services:
+  rmq:
+    <<: *common-config
+    hostname: rmq
+    volumes:
+      - ./data/rmq:/var/lib/rabbitmq/mnesia
+      - ./log/rmq:/var/log/rabbitmq
+    ports:
+      # HOST:CONTAINER
+      - 15672:15672
+  perf-test:
+    image: pivotalrabbitmq/perf-test:latest
+    networks:
+      - rabbitnet
+    command:
+      - --uri=amqp://rmq
+      - --servers-startup-timeout=30
+      - --producers=5
+      - --consumers=0
+      - --confirm=1000
+      - --flag=mandatory
+      - --flag=persistent
+      - --pmessages=4000
+      - --auto-delete=false
+      - --queue=rmq-14639
+    depends_on:
+      - rmq
