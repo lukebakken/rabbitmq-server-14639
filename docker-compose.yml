@@ -32,8 +32,9 @@ services:
       - --confirm=1000
       - --flag=mandatory
       - --flag=persistent
-      - --pmessages=4000
+      - --pmessages=100000
       - --auto-delete=false
       - --queue=rmq-14639
+      - --size=65536
     depends_on:
       - rmq
