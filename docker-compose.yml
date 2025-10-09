@@ -27,7 +27,7 @@ services:
     command:
       - --uri=amqp://rmq-14639:guest@rmq/vhost0
       - --servers-startup-timeout=30
-      - --producers=5
+      - --producers=1
       - --consumers=0
       - --confirm=1000
       - --flag=mandatory
@@ -35,6 +35,6 @@ services:
       - --pmessages=100000
       - --auto-delete=false
       - --queue=rmq-14639
-      - --size=65536
+      - --size=4096
     depends_on:
       - rmq
